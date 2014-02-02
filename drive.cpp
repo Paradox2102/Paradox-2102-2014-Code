@@ -39,8 +39,8 @@ void drive::go()
 {
 	if(fabs(joy->GetY()) > 0.15 || fabs(joy->GetZ()) > 0.15)
 	{
-		starboardtalon->Set(ldexp(joy->GetY(),5/3) - 0.7 * ldexp(joy->GetZ(),5/3));
-		porttalon->Set(-(ldexp(joy->GetY(),5/3) + 0.7 * ldexp(joy->GetZ(),5/3)));
+		starboardtalon->Set(joy->GetY() - 0.7 * joy->GetX());
+		porttalon->Set(-(joy->GetY() + 0.7 * joy->GetX()));
 	}
 	else
 	{
