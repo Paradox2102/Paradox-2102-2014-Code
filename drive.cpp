@@ -20,7 +20,7 @@ drive::drive(Joystick *j, Talon *p, Talon *s)
 
 void drive::shift()
 {
-	if(prime && joy->GetTrigger())
+	if(prime && joy->GetRawButton(2))
 	{
 		starsol->Set(shifted);
 		portsol->Set(!shifted);
@@ -28,11 +28,10 @@ void drive::shift()
 		shifted = !shifted;
 	}
 		
-	if(!joy->GetTrigger())
+	if(!joy->GetRawButton(2))
 		prime = true;
 	else
 		prime = false;
-	
 }
 
 void drive::go()

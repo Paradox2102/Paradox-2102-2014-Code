@@ -17,12 +17,10 @@ class RobotDemo : public SimpleRobot
 	
 	drive *d;
 	manipulator *arm;
-	DigitalInput *button;
 	
 public:
 	RobotDemo()
 	{
-		button = new DigitalInput(2);
 		ds = DriverStationLCD::GetInstance();
 		porttalon = new Talon(1);
 		starboardtalon = new Talon(2);
@@ -30,7 +28,7 @@ public:
 		comp = new Compressor(1,8);
 		
 		d = new drive(stick, porttalon, starboardtalon);
-		arm = new manipulator();
+		arm = new manipulator(stick);
 	}
 	
 
@@ -51,9 +49,6 @@ public:
 		
 		while(IsOperatorControl())
 		{
-			ds->PrintfLine(DriverStationLCD::kUser_Line1,"arm voltage: %lf", arm->getarmangle());
-			
-			ds->PrintfLine(DriverStationLCD::kUser_Line2,"button pressed: %d", button->Get());
 			
 			d->go();
 			
