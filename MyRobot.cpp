@@ -10,25 +10,37 @@
  */ 
 class RobotDemo : public SimpleRobot
 {
-	Talon *porttalon, *starboardtalon;
 	Joystick *stick; // only joystick
+	Joystick *stick2;
 	Compressor *comp;
 	DriverStationLCD *ds;
 	
+	DoubleSolenoid *armlock;
+	
+	DigitalInput *ball;
+	
 	drive *d;
 	manipulator *arm;
+	
+	bool wasenabled;
 	
 public:
 	RobotDemo()
 	{
 		ds = DriverStationLCD::GetInstance();
-		porttalon = new Talon(1);
-		starboardtalon = new Talon(2);
 		stick = new Joystick(1);
-		comp = new Compressor(1,8);
+		comp = new Compressor(14,4);
+		ball = new DigitalInput(1);
+	
+		wasenabled = false;
 		
-		d = new drive(stick, porttalon, starboardtalon);
-		arm = new manipulator(stick);
+		//r = new Relay(4);
+		d = new drive(stick);
+		arm = new manipulator(stick, ds);
+		
+		armlock = new DoubleSolenoid(5,6);
+
+		
 	}
 	
 
@@ -47,12 +59,47 @@ public:
 	{
 		comp->Start();
 		
+	
 		while(IsOperatorControl())
 		{
 			
+			if(wasenabled == false && IsEnabled() == true)
+			{
+				
+				//arm->initialize();
+				
+			
+				wasenabled = true;
+				
+				//Wait(.5);
+					
+			}
+			
+			wasenabled = IsEnabled();
 			d->go();
 			
-			ds->UpdateLCD();
+			//r->Set((r->kForward));
+			
+
+			
+			//ds->PrintfLine(ds->kUser_Line1, "button 11: %d " ,stick->GetRawButton(11));
+			//ds->PrintfLine(ds->kUser_Line2, "button 2: %d", stick->GetRawButton(2));
+					
+			//arm->pickup();
+			
+			if(stick->GetRawButton(7))
+			{
+				armlock->Set(armlock->kForward);
+			}
+			else
+			{
+				armlock->Set(armlock->kReverse);
+			}
+			ds->PrintfLine(ds->kUser_Line2, "button 7: %d", stick->GetRawButton(7));
+			
+			//arm->shoot();
+			
+		ds->UpdateLCD();
 		}
 	}
 	

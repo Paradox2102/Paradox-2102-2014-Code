@@ -5,7 +5,7 @@ class drive
 {
 public:
 
-	drive(Joystick *j, Talon *p, Talon *s);
+	drive(Joystick *j);
 	
 	void go();
 	void shift();
@@ -17,4 +17,5 @@ protected:
 	Joystick *joy;
 	Solenoid *starsol, *portsol;
 	Encoder *portencoder, *starboardencoder;
+	DigitalInput *di;
 };
